@@ -11,9 +11,9 @@ class ConvertItemTree:
     __item_tree = None
 
     def __init__(self) -> None:
-        pass
+        self.__convert_to_dict()
 
-    def convert_to_dict(self):
+    def __convert_to_dict(self):
         filename = "items_tree.config"
         with open(filename, "r") as f:
             text = f.read()
@@ -32,7 +32,7 @@ class ConvertItemTree:
                 parent.append(node)
             stack.append(parent[node])
         
-        __item_tree = result
+        self.__item_tree = result
 
     def get_class_name(self, item_name):
         def get_name(dic, item_name):
@@ -54,4 +54,4 @@ class ConvertItemTree:
                         return sub_key
             return None
         
-        get_name(self.__item_tree, item_name)
+        return get_name(self.__item_tree, item_name)

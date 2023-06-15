@@ -13,10 +13,13 @@ class GetSkillEffect:
     __skill_Dictionary = None
     __skill_influent_items_Dictionary = None
 
-    def __init__(self, value):
-        self.value = value
+    def __init__(self):
+        pass
 
     def get_full_skill_effect(self, skill_path, skill_name):
+        if not skill_name or skill_name == "":
+            return None
+
         if not self.__skill_Dictionary or not self.__skill_Dictionary[skill_name]:
             # 解析技能列表，并缓存
             # {
@@ -63,11 +66,16 @@ class GetSkillEffect:
         rv = {}
         subkeys = ["basic", "advanced", "export"]
         for i in len(self.__skill_Dictionary[skill_name]):
-            rv[i] = self.__skill_Dictionary[skill_name][subkeys[i]]
+            rv[i] = []
+            for j in len(self.__skill_Dictionary[skill_name][subkeys[i]]):
+                rv[i][j] = []
+                for k in len(self.__skill_Dictionary[skill_name][subkeys[i]]):
+                    rv[i][j][k] = self.__skill_Dictionary[skill_name][subkeys[i]][j][k] * -0.01
+
         # rv = {
-        # [(6, 5), (12, 10), (18, 15), (24, 20), (30, 25)],
-        # [(6, 5), (12, 10), (18, 15), (24, 20), (30, 25)],
-        # [(6, 5), (12, 10), (18, 15), (24, 20), (30, 25)]
+        # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
+        # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
+        # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]]
         # }
         return rv
 

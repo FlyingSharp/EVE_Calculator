@@ -1,11 +1,12 @@
-import Item
+from typing import Any
+import Flagship
 import skill.GetSkillEffect
 import MySkill
 
 import math
 
-class Component(Item.Item):
-    __name_in_tree = "旗舰组件"
+class IndustoryFlagShip(Flagship.Flagship):
+    __name_in_tree = "旗舰级工业舰"
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self.__config_path = self._get_config_path()
