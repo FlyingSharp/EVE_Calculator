@@ -1,13 +1,16 @@
+
+import construction
 from construction.component.BasicComponent import BasicComponent
 from construction.component.AdvancedComponent import AdvancedComponent
 
 from construction.ship.conventionalship.freighter.Freighter import Freighter
 
+
 class Factory:
     item_classes = {
-        "基础组件": BasicComponent.BasicComponent,
-        "高级组件": AdvancedComponent.AdvancedComponent,
-        "货舰": Freighter.Freighter
+        "基础组件":  BasicComponent,
+        "高级组件": AdvancedComponent,
+        "货舰": Freighter
         # "旗舰级工业舰": 
     }
 

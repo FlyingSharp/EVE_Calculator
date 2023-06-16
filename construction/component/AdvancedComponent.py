@@ -1,4 +1,4 @@
-from component.Component import Component
+from construction.component.Component import Component
 
 class AdvancedComponent(Component):
     __name_in_tree = "高级组件"

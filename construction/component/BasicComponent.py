@@ -1,4 +1,4 @@
-from component.Component import Component
+from construction.component.Component import Component
 from skill.GetSkillEffect import GetSkillEffect
 import MySkill
 

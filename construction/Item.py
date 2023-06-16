@@ -3,7 +3,7 @@ import re
 import inspect
 import math
 
-import skill.GetSkillEffect
+from skill.GetSkillEffect import GetSkillEffect
 import MySkill
 
 class Item:
@@ -55,11 +55,11 @@ class Item:
         material_influence = 0
         time_influence = 0
 
-        item_relate_skills = skill.GetSkillEffect.GetSkillEffect.get_skill_name_by_item_name(self.__name_in_tree) # ("旗舰船只制造")
+        item_relate_skills = GetSkillEffect().get_skill_name_by_item_name(self.__name_in_tree) # ("旗舰船只制造")
         my_skill = MySkill.MySkill().skills # 我有的技能  {"货舰制造" = [5, 5, 5]}
         for skill_name, skill_level in my_skill:
             if skill_name in item_relate_skills:
-                skill_effect = skill.GetSkillEffect.GetSkillEffect.get_full_skill_effect(self.__skill_path, skill_name)
+                skill_effect = GetSkillEffect().get_full_skill_effect(self.__skill_path, skill_name)
                 # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
                 # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
                 # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]]
