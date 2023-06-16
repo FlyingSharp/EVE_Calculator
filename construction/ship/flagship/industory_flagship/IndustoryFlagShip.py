@@ -1,6 +1,6 @@
 from typing import Any
-import Flagship
-import skill.GetSkillEffect
+from construction.ship.flagship.Flagship import Flagship
+from skill.GetSkillEffect import GetSkillEffect
 import MySkill
 
 import math
@@ -17,11 +17,11 @@ class IndustoryFlagShip(Flagship.Flagship):
         material_influence = 0
         time_influence = 0
 
-        item_relate_skills = skill.GetSkillEffect.GetSkillEffect.get_skill_name_by_item_name(self.__name_in_tree)
+        item_relate_skills = GetSkillEffect().get_skill_name_by_item_name(self.__name_in_tree)
         my_skill = MySkill.MySkill().skills
         for skill_name, skill_level in my_skill:
             if skill_name in item_relate_skills:
-                skill_effect = skill.GetSkillEffect.GetSkillEffect.get_full_skill_effect(self.__skill_path, skill_name)
+                skill_effect = GetSkillEffect().get_full_skill_effect(self.__skill_path, skill_name)
                 for i in range(0, 2):
                     influence_tuple_list = skill_effect[i]
                     for k, v in influence_tuple_list:

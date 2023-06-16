@@ -1,5 +1,4 @@
 import os
-import configparser
 
 class Singleton(type):
     _instances = {}

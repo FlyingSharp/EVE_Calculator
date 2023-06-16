@@ -1,13 +1,13 @@
-import construction.component.BasicComponent as bc
-import construction.component.AdvancedComponent as ac
+from construction.component.BasicComponent import BasicComponent
+from construction.component.AdvancedComponent import AdvancedComponent
 
-import construction.ship.conventionalship.freighter.Freighter as freg
+from construction.ship.conventionalship.freighter.Freighter import Freighter
 
 class Factory:
     item_classes = {
-        "基础组件": bc.BasicComponent,
-        "高级组件": ac.AdvancedComponent,
-        "货舰": freg.Freighter
+        "基础组件": BasicComponent.BasicComponent,
+        "高级组件": AdvancedComponent.AdvancedComponent,
+        "货舰": Freighter.Freighter
         # "旗舰级工业舰": 
     }
 
@@ -26,6 +26,12 @@ class Factory:
         else: obj_item = matching_items[0]
 
         return obj_item
+
+
+
+
+
+
 
 # 示例用法
 # factory = Factory()

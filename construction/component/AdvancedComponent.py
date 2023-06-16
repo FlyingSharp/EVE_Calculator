@@ -1,6 +1,6 @@
-import Component
+from component.Component import Component
 
-class AdvancedComponent(Component.Component):
+class AdvancedComponent(Component):
     __name_in_tree = "高级组件"
     def __init__(self, name: str) -> None:
         super().__init__(name)
