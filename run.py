@@ -1,10 +1,12 @@
 import Factory
 import ConvertItemTree
+from construction.Item import Item
 
-def format_material_list(item_obj):
+def format_material_list(item_obj) -> str:
+    assert item_obj is not None, "item_obj 不能为空！"
     item_obj_name = item_obj.name
     out_str = f"{item_obj_name}:\n"
-    material_list = item_obj.get_final_material_list() #{ mat_1 = 15, mat_2 = 3}
+    material_list = item_obj.get_final_material_list().items() #{ mat_1 = 15, mat_2 = 3}
     for k, v in material_list:
         out_str += f"\t{k}:{v}\n"
 
@@ -12,28 +14,30 @@ def format_material_list(item_obj):
     mineral_list = {}
     need_strench = False
     for k, v in material_list:
-        sub_item = Factory.Factory().create_item(ConvertItemTree.ConvertItemTree().get_class_name(k))
+        sub_item = Factory.Factory().create_item(k)
         if sub_item:  # 例如: 如果找到了 一个组件
             sub_material_list = sub_item.get_final_material_list() # 获得组件材料 如: 三钛合金:1000
             if not sub_material_list: # 如果是不可制造的高级物品（非基础矿物），跳过材料列表
                 continue
-            for sub_k, sub_v in sub_material_list:  # 遍历材料名称，加入总材料列表   三钛合金:1000
-                if mineral_list.has_key(sub_k): # 如果已经加过三钛合金了
+            for sub_k, sub_v in sub_material_list.items():  # 遍历材料名称，加入总材料列表   三钛合金:1000
+                need_strench = True
+                if sub_k in mineral_list: # 如果已经加过三钛合金了
                     mineral_list[sub_k] += sub_v * v # 组件所需的基础材料 * 所需组件数量
-                    need_strench = True
+                else:
+                    mineral_list[sub_k] = sub_v * v
         else:
             mineral_list[k] = v
     if need_strench:
         out_str += "各项基础材料总计:\n"
-    for k, v in mineral_list:
+    for k, v in mineral_list.items():
         out_str += f"\t{k}:{v}\n"
 
     return out_str
 
 def main():
-    item_name = "渡神级"
-    item_class_name = ConvertItemTree.ConvertItemTree().get_class_name(item_name)
-    item_obj = Factory.Factory().create_item(item_class_name)
+    item_name = "长须鲸级"
+
+    item_obj = Factory.Factory().create_item(item_name)
 
     all_material = format_material_list(item_obj)
     print(all_material)

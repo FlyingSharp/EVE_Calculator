@@ -3,12 +3,12 @@ import re
 import inspect
 import math
 
-from skill.GetSkillEffect import GetSkillEffect
+from skill.GetSkillEffect import  GetSkillEffect
 import MySkill
 
 class Item:
     __name_in_tree = "物品"
-    __skill_path = "industory_skill/skill.config"
+    _skill_path = "skill/industory_skill/skill.config"
     __config_path = None
 
     _material_list = None
@@ -55,29 +55,33 @@ class Item:
         material_influence = 0
         time_influence = 0
 
-        item_relate_skills = GetSkillEffect().get_skill_name_by_item_name(self.__name_in_tree) # ("旗舰船只制造")
-        my_skill = MySkill.MySkill().skills # 我有的技能  {"货舰制造" = [5, 5, 5]}
-        for skill_name, skill_level in my_skill:
+        item_relate_skills = GetSkillEffect().get_skill_name_by_item_name(self.__name_in_tree)
+        my_skill = MySkill.MySkill().skills
+        for skill_name, skill_level in my_skill.items():
             if skill_name in item_relate_skills:
-                skill_effect = GetSkillEffect().get_full_skill_effect(self.__skill_path, skill_name)
-                # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
-                # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
-                # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]]
+                skill_effect = GetSkillEffect().get_full_skill_effect(self._skill_path, skill_name)
+                effect_self_skill = skill_effect[skill_name]
                 for i in range(0, 2):
-                    influence_tuple_list = skill_effect[i]
-                    for k, v in influence_tuple_list:
-                        material_influence += v[0]
-                        time_influence += v[1]
+                    influence_tuple_list = effect_self_skill[i]
+
+                    inner_level = skill_level[i] - 1
+                    material_influence += influence_tuple_list[inner_level][0]
+                    time_influence += influence_tuple_list[inner_level][1]
 
         return material_influence, time_influence
     
     def get_final_material_list(self) -> dict:
         material_influence, time_influence = self.get_skill_influece()
-        material_list = self.get_material_list()
+        all_material_list = self.get_material_list()
+        material_list = {}
+        out_list = {}
+        if self.name in all_material_list:
+            material_list = all_material_list[self.name].items()
+
         for material_name, count in material_list:
-            material_list[material_name] = math.ceil( count * (1 + material_influence))
+            out_list[material_name] = math.ceil( count * (1 + material_influence))
         
-        return material_list
+        return out_list
     
     def get_item_class_name(self):
         return self.__name_in_tree

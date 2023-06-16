@@ -1,4 +1,5 @@
 import os
+import re
 
 def singleton(cls):
     instances = {}
@@ -16,7 +17,7 @@ class GetSkillEffect:
     def __init__(self):
         pass
 
-    def get_full_skill_effect(self, skill_path, skill_name):
+    def get_full_skill_effect(self, skill_path, skill_name: str):
         if not skill_name or skill_name == "":
             return None
 
@@ -32,57 +33,67 @@ class GetSkillEffect:
             try:
                 skill_Dictionary = {}
                 with open(skill_path, "r") as f:
-                    current_key = ""
-                    for line in f.readlines():
-                        # 去除每行两端的空格和换行符
-                        line = line.strip()
-                        # 忽略空行
+                    input_str = f.read()
+
+                    for line in input_str.split("\n"):
+                        line = re.sub(r"\s", "", line)
                         if not line:
                             continue
-                        # 判断是否为主键
                         if line.endswith(":"):
                             current_key = line[:-1]
-                            skill_Dictionary[current_key] = {}
                         else:
-                            # 判断是否为子键
-                            if line.startswith(" "):
-                                try:
-                                    subkey, values_str = line.strip().split(": ")
-                                    values = [tuple(map(int, v.strip("()").split(", "))) for v in values_str.split(", ")]
-                                except (ValueError, TypeError) as e:
-                                    print(f"行 {line} 格式不正确！无法分割")
-                                    continue
-                                skill_Dictionary[current_key][subkey] = values
+                            try:
+                                subkey, values_str = line.strip().split(":", 1)
+                                values = [
+                                    [int(v) for v in value_str.replace(" ", "").lstrip("(").rstrip(")").split(",")] for
+                                    value_str in values_str.split(",")]
+                                skill_Dictionary.setdefault(current_key, {}).setdefault(subkey, []).extend(values)
+                            except (ValueError, TypeError) as e:
+                                print(f"行 {line} 格式不正确！无法分割")
+                                continue
+
+                    output_dict = {}
+                    for category, items in skill_Dictionary.items():
+                        output_dict[category] = {}
+                        for item, values in items.items():
+                            original_list = [value for sublist in values for value in sublist]
+                            new_list = []
+                            for i in range(0, len(original_list), 2):
+                                new_list.append([original_list[i], original_list[i + 1]])
+
+                            output_dict[category][item] = new_list
 
                 if not self.__skill_Dictionary:
-                    self.__skill_Dictionary = skill_Dictionary
+                    self.__skill_Dictionary = output_dict
                 else:
-                    self.__skill_Dictionary.update(skill_Dictionary) # 将新解析的拼接到原有的技能表上去
+                    self.__skill_Dictionary.update(output_dict) # 将新解析的拼接到原有的技能表上去
             except FileNotFoundError:
                 print("文件不存在！")
                 exit()
         
         # 已缓存完技能树
-        rv = {}
-        subkeys = ["basic", "advanced", "export"]
-        for i in len(self.__skill_Dictionary[skill_name]):
-            rv[i] = []
-            for j in len(self.__skill_Dictionary[skill_name][subkeys[i]]):
-                rv[i][j] = []
-                for k in len(self.__skill_Dictionary[skill_name][subkeys[i]]):
-                    rv[i][j][k] = self.__skill_Dictionary[skill_name][subkeys[i]][j][k] * -0.01
+        index_dict = {"basic": 0, "advanced": 1, "export": 2}
+
+        output_dict = {}
+        for category, items in self.__skill_Dictionary.items():
+            output_dict[category] = {}
+            for key, values in items.items():
+                for i in range(len(values)):
+                    for j in range(len(values[i])):
+                        values[i][j] *= -0.01
+                output_dict[category][index_dict[key]] = values
 
         # rv = {
         # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
         # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
         # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]]
         # }
-        return rv
+        return output_dict
 
     def get_skill_name_by_item_name(self, item_name):
         if not self.__skill_influent_items_Dictionary:
             try:
-                with open("skill_influent_items.config", 'r', encoding='utf-8') as f:
+                with open("skill/skill_influent_items.config", 'r', encoding='utf-8') as f:
                     lines = [line for line in f.readlines() if not line.startswith("#")]
             except FileNotFoundError:
                 print(os.path.join(os.path.dirname(os.path.abspath(__file__))), "skill_influent_items.config") + "不存在"
