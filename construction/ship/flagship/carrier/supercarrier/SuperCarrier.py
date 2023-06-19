@@ -31,8 +31,6 @@ class SuperCarrier(Carrier):
         final_material_influence = material_influence + super_material_influence
         final_time_influence = time_influence + super_time_influence
 
-        print(f"超级航母: final_material_influence: {final_material_influence}, final_time_influence: {final_time_influence}")
-
         return final_material_influence, final_time_influence
     
     def get_final_material_list(self) -> dict:

@@ -35,7 +35,7 @@ def format_material_list(item_obj) -> str:
     return out_str
 
 def main():
-    item_name = "冥府级"
+    item_name = "长须鲸级"
 
     item_obj = Factory.Factory().create_item(item_name)
 

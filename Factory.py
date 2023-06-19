@@ -23,12 +23,15 @@ class Factory:
 
     def create_item(self, item_name: str):
         if item_name is None:
+            print("没有输入物品名称")
             return None
         item_class_name = ConvertItemTree.ConvertItemTree().get_class_name(item_name)
         if item_class_name is None:
+            print("没有找到物品分类")
             return None
         cls = self.item_classes.get(item_class_name.lower())
         if cls is None:
+            print("没有找到物品分类对应的类名称")
             return None
         
         obj_item = None
