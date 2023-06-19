@@ -1,11 +1,14 @@
-from construction.ship.Ship import Ship
+from typing import Any
+from construction.ship.flagship.Flagship import Flagship
 from skill.GetSkillEffect import GetSkillEffect
 import MySkill
 
 import math
 
-class ConventionalShip(Ship):
-    __name_in_tree = "常规舰船"
+
+class StrategicFreighter(Flagship):
+    __name_in_tree = "战略货舰"
+
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self.__config_path = self._get_config_path()
@@ -30,7 +33,7 @@ class ConventionalShip(Ship):
                     time_influence += influence_tuple_list[inner_level][1]
 
         return material_influence + super_material_influence, time_influence + super_time_influence
-    
+
     def get_final_material_list(self) -> dict:
         material_influence, time_influence = self.get_skill_influece()
         all_material_list = self.get_material_list()
@@ -41,5 +44,5 @@ class ConventionalShip(Ship):
 
         for material_name, count in material_list:
             out_list[material_name] = math.ceil( count / 1.5 * (1.5 + material_influence))
-        
+
         return out_list

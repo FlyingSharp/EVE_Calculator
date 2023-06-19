@@ -11,3 +11,6 @@ class AdvancedComponent(Component):
     
     def get_skill_influece(self):
         return None
+
+    def get_final_material_list(self) -> None:
+        return None

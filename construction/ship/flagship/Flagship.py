@@ -22,14 +22,20 @@ class Flagship(Ship):
             if skill_name in item_relate_skills:
                 skill_effect = GetSkillEffect().get_full_skill_effect(self._skill_path, skill_name)
                 effect_self_skill = skill_effect[skill_name]
-                for i in range(0, 2):
+                for i in range(0, 3):
                     influence_tuple_list = effect_self_skill[i]
 
                     inner_level = skill_level[i] - 1
                     material_influence += influence_tuple_list[inner_level][0]
                     time_influence += influence_tuple_list[inner_level][1]
 
-        return material_influence + super_material_influence, time_influence + super_time_influence
+        final_material_influence = material_influence + super_material_influence
+        final_time_influence = time_influence + super_time_influence
+
+        print(
+            f"旗舰: final_material_influence: {final_material_influence}, final_time_influence: {final_time_influence}")
+
+        return final_material_influence, final_time_influence
     
     def get_final_material_list(self) -> dict:
         material_influence, time_influence = self.get_skill_influece()
@@ -40,6 +46,6 @@ class Flagship(Ship):
             material_list = all_material_list[self.name].items()
 
         for material_name, count in material_list:
-            out_list[material_name] = math.ceil( count * (1 + material_influence))
+            out_list[material_name] = math.ceil( count / 1.5 * (1.5 + material_influence))
         
         return out_list

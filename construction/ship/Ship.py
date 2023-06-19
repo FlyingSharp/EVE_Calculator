@@ -23,7 +23,7 @@ class Ship(Item):
             if skill_name in item_relate_skills:
                 skill_effect = GetSkillEffect().get_full_skill_effect(self._skill_path, skill_name)
                 effect_self_skill = skill_effect[skill_name]
-                for i in range(0, 2):
+                for i in range(0, 3):
                     influence_tuple_list = effect_self_skill[i]
 
                     inner_level = skill_level[i] - 1
@@ -41,6 +41,6 @@ class Ship(Item):
             material_list = all_material_list[self.name].items()
 
         for material_name, count in material_list:
-            out_list[material_name] = math.ceil( count * (1 + material_influence))
+            out_list[material_name] = math.ceil( count / 1.5 * (1.5 + material_influence))
         
         return out_list

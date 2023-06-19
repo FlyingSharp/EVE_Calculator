@@ -74,21 +74,23 @@ class GetSkillEffect:
         # 已缓存完技能树
         index_dict = {"basic": 0, "advanced": 1, "export": 2}
 
-        output_dict = {}
+        output_dict_2 = {}
         for category, items in self.__skill_Dictionary.items():
-            output_dict[category] = {}
+            output_dict_2[category] = {}
             for key, values in items.items():
+                val_tmp = {}
                 for i in range(len(values)):
+                    val_tmp[i] = {}
                     for j in range(len(values[i])):
-                        values[i][j] *= -0.01
-                output_dict[category][index_dict[key]] = values
+                        val_tmp[i][j] = values[i][j] * -0.01
+                output_dict_2[category][index_dict[key]] = val_tmp
 
         # rv = {
         # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
         # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]],
         # [[-0.06, -0.05], [-0.12, -0.10], [-0.18, -0.15], [-0.24, -0.20], [-0.30, -0.25]]
         # }
-        return output_dict
+        return output_dict_2
 
     def get_skill_name_by_item_name(self, item_name):
         if not self.__skill_influent_items_Dictionary:
@@ -111,5 +113,6 @@ class GetSkillEffect:
             self.__skill_influent_items_Dictionary = skill_influent_items_Dictionary
         
         skill_list = tuple(k for k, v in self.__skill_influent_items_Dictionary.items() if v == item_name)
+
         return skill_list
     
