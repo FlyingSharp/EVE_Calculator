@@ -2,6 +2,7 @@ from construction.component.BasicComponent import BasicComponent
 from construction.component.AdvancedComponent import AdvancedComponent
 
 from construction.ship.conventionalship.freighter.Freighter import Freighter
+from construction.ship.conventionalship.industory_ship.IndustoryCommderShip.IndustoryCommderShip import IndustoryCommderShip
 
 from construction.ship.flagship.industory_flagship.IndustoryFlagShip import IndustoryFlagShip
 from construction.ship.flagship.strategic_freighter.StrategicFreighter import StrategicFreighter
@@ -17,6 +18,7 @@ class Factory:
         "旗舰级工业舰": IndustoryFlagShip,
         "战略货舰": StrategicFreighter,
         "超级航母": SuperCarrier,
+        "工业指挥舰": IndustoryCommderShip,
     }
 
     __obj_created_list = [] # 已经创建过的obj列表

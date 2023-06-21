@@ -25,17 +25,17 @@ def format_material_list(item_obj) -> str:
                     mineral_list[sub_k] += sub_v * v # 组件所需的基础材料 * 所需组件数量
                 else:
                     mineral_list[sub_k] = sub_v * v
-        else:
+        elif v not in mineral_list.keys():
             mineral_list[k] = v
     if need_strench:
         out_str += "各项基础材料总计:\n"
-    for k, v in mineral_list.items():
-        out_str += f"\t{k}:{v}\n"
+        for k, v in mineral_list.items():
+            out_str += f"\t{k}:{v}\n"
 
     return out_str
 
 def main():
-    item_name = "长须鲸级"
+    item_name = "逆戟鲸级"
 
     item_obj = Factory.Factory().create_item(item_name)
 
