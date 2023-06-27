@@ -51,19 +51,57 @@ def format_material_list(item_obj) -> str:
         price = GetPrice().get_price(k)
         f_all_price += price * v
 
-    currency_string = get_currency_string(f_all_price)
+    currency_string = get_currency_string(f_all_price)[::-1].replace(",", ".", 1)[::-1]
     out_str += f"\n材料价格总计:\n{currency_string}"
 
     return out_str
 
+def __get_mat_with_layer(mat_in_layers, layer_count, item_name, item_count):
+    item = Factory.Factory().create_item(item_name)
+    if item:
+        material_list_pack = item.get_final_material_list()  # 获得组件材料 如: 三钛合金:1000 { mat_1 = 15, mat_2 = 3}
+        material_list = {}
+        if material_list_pack:
+            material_list = material_list_pack.items()
+        # 这边应该检查这一层是否还没有初始化；如果没有，就以当前material_list初始化为一个字典；如果已经初始化了，就在当前的material_list和这一层的键中检索是否已经存在，如果已经存在在这一层的键中，就更新这个键的值
+        if layer_count not in mat_in_layers:
+            mat_in_layers[layer_count] = {}
+        for mat_name, mat_count in material_list:
+            if mat_name not in mat_in_layers[layer_count]:
+                mat_in_layers[layer_count][mat_name] = 0
+            mat_in_layers[layer_count][mat_name] += mat_count
+
+        for mat_name, mat_count in material_list:
+            __get_mat_with_layer(mat_in_layers, layer_count + 1, mat_name, mat_count)
+
+def get_mat(item_name, item_count):
+    mat_in_layers = {}
+    layer_count = 0
+
+    # 递归执行获得制造材料
+    __get_mat_with_layer(mat_in_layers, layer_count, item_name, item_count)
+
+    out_str = f"{item_name}所需材料:\n"
+    for k, v in mat_in_layers[0].items():
+        out_str += f"\t{k}:{v}\n"
+    if len(mat_in_layers) > 1:
+        out_str += "所有基本材料：\n"
+        for k, v in mat_in_layers[len(mat_in_layers) - 1].items():
+            out_str += f"\t{k}:{v}\n"
+
+    return out_str
+
 def main():
-    item_name = "长须鲸级"
+    item_name = "冥府级"
+    item_count = 1
 
-    item_obj = Factory.Factory().create_item(item_name)
+    # item_obj = Factory.Factory().create_item(item_name)
+    #
+    # all_material = format_material_list(item_obj)
+    # print(all_material)
 
-    all_material = format_material_list(item_obj)
-    print(all_material)
-
+    materials_string = get_mat(item_name, item_count)
+    print(materials_string)
 
 if __name__ == "__main__":
     main()

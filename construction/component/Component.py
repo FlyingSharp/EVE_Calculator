@@ -6,6 +6,7 @@ import math
 
 class Component(Item):
     __name_in_tree = "旗舰组件"
+    __manufacturing_costs = 150000000
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self.__config_path = self._get_config_path()

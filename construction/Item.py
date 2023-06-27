@@ -10,6 +10,7 @@ class Item:
     __name_in_tree = "物品"
     _skill_path = "skill/industory_skill/skill.config"
     __config_path = None
+    __manufacturing_costs = 0.0
 
     _material_list = None
 
@@ -41,6 +42,9 @@ class Item:
                     if match:
                         key = match.group(1)
                         value = int(match.group(2))
+                        if key == "制造费":
+                            self.__manufacturing_costs = value
+                            continue
                         if current_category is None:
                             current_category = key
                             mat_list[current_category] = {}

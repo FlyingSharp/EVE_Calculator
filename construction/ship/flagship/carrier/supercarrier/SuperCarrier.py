@@ -6,6 +6,7 @@ import math
 
 class SuperCarrier(Carrier):
     __name_in_tree = "超级航母"
+    __manufacturing_costs = 5000000000
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self.__config_path = self._get_config_path()

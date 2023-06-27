@@ -6,6 +6,7 @@ import math
 
 class Freighter(ConventionalShip):
     __name_in_tree = "货舰"
+    __manufacturing_costs = 1500000000
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self.__config_path = self._get_config_path()
