@@ -44,3 +44,9 @@ class Ship(Item):
             out_list[material_name] = math.ceil( count / 1.5 * (1.5 + material_influence))
         
         return out_list
+
+    def get_manufacturing_cost(self) -> float:
+        return self.__manufacturing_costs
+
+    def get_item_class_name(self):
+        return self.__name_in_tree

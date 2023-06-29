@@ -55,7 +55,7 @@ class GetPrice:
         return str(self.__paths) + '\n' + str(self.__price_data)
 
     def get_price(self, name):
-        return self.__price_data[name]
+        return 0 if name not in self.__price_data else self.__price_data[name]
 
 
 if __name__ == "__main__":

@@ -10,13 +10,13 @@ class Item:
     __name_in_tree = "物品"
     _skill_path = "skill/industory_skill/skill.config"
     __config_path = None
-    __manufacturing_costs = 0.0
 
     _material_list = None
 
     def __init__(self, name: str) -> None:
         self.name = name
         self.__config_path = self._get_config_path()
+        self.__manufacturing_costs = 0.0
 
     def _get_config_path(self):
         # 获取调用该方法的类的文件路径
@@ -86,6 +86,9 @@ class Item:
             out_list[material_name] = math.ceil( count / 1.5 * (1.5 + material_influence))
         
         return out_list
-    
+
+    def get_manufacturing_cost(self) -> float:
+        return self.__manufacturing_costs
+
     def get_item_class_name(self):
         return self.__name_in_tree
