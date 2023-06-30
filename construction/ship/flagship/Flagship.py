@@ -10,8 +10,8 @@ class Flagship(Ship):
         super().__init__(name)
         self.__config_path = self._get_config_path()
 
-    def get_skill_influece(self):
-        super_material_influence, super_time_influence = super().get_skill_influece()
+    def get_skill_influence(self):
+        super_material_influence, super_time_influence = super().get_skill_influence()
 
         material_influence = 0
         time_influence = 0
@@ -35,7 +35,7 @@ class Flagship(Ship):
         return final_material_influence, final_time_influence
     
     def get_final_material_list(self) -> dict:
-        material_influence, time_influence = self.get_skill_influece()
+        material_influence, time_influence = self.get_skill_influence()
         all_material_list = self.get_material_list()
         material_list = {}
         out_list = {}

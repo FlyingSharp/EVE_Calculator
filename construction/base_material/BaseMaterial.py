@@ -1,15 +1,16 @@
-from construction.component.Component import Component
+from construction.Item import Item
 
-class AdvancedComponent(Component):
-    __name_in_tree = "高级组件"
+class BaseMaterial(Item):
+    __name_in_tree = "基础材料"
+
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self.__config_path = self._get_config_path()
         self.__manufacture_available = False
 
-    def get_material_list(self) -> dict:
+    def get_material_list(self) -> None:
         return None
-    
+
     def get_skill_influence(self):
         return None
 

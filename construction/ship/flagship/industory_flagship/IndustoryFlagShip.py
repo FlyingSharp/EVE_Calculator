@@ -13,8 +13,8 @@ class IndustoryFlagShip(Flagship):
         self.__config_path = self._get_config_path()
         self.__manufacturing_costs = 3500000000
 
-    def get_skill_influece(self):
-        super_material_influence, super_time_influence = super().get_skill_influece()
+    def get_skill_influence(self):
+        super_material_influence, super_time_influence = super().get_skill_influence()
 
         material_influence = 0
         time_influence = 0
@@ -35,7 +35,7 @@ class IndustoryFlagShip(Flagship):
         return material_influence + super_material_influence, time_influence + super_time_influence
     
     def get_final_material_list(self) -> dict:
-        material_influence, time_influence = self.get_skill_influece()
+        material_influence, time_influence = self.get_skill_influence()
         all_material_list = self.get_material_list()
         material_list = {}
         out_list = {}

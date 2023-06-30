@@ -33,50 +33,45 @@ def get_currency_string(currency):
     return currency_string[::-1].replace(",", ".", 1)[::-1]
 
 
-def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack):
+def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, manufacture_count):
     item = Factory.Factory().create_item(item_name)
-    if item:
-        manufacturing_cost = item.get_manufacturing_cost()
+    if item.get_manufacture_available():
+        manufacturing_cost = item.get_manufacturing_cost() * item_count
         print(f"manufacturing_cost:{manufacturing_cost}")
-        manufacturing_costs_stack.append(item.get_manufacturing_cost())
+        manufacturing_costs_stack.append(manufacturing_cost)
         material_list_pack = item.get_final_material_list()  # 获得组件材料 如: 三钛合金:1000 { mat_1 = 15, mat_2 = 3}
         material_list = {}
         if material_list_pack:
             material_list.update(material_list_pack.items())
-        else:
-            update_dict(need_prepare_mat, {item_name: item_count})
         # 这边应该检查这一层是否还没有初始化；如果没有，就以当前material_list初始化为一个字典；如果已经初始化了，就在当前的material_list和这一层的键中检索是否已经存在，如果已经存在在这一层的键中，就更新这个键的值
         if layer_count not in mat_in_layers:
             mat_in_layers[layer_count] = {}
         for mat_name, mat_count in material_list.items():
             if mat_name not in mat_in_layers[layer_count]:
                 mat_in_layers[layer_count][mat_name] = 0
-            mat_in_layers[layer_count][mat_name] += mat_count * item_count
+            mat_in_layers[layer_count][mat_name] += mat_count * item_count  # mat_count：建造这个物品所需要的材料的数量   item_count：这个物品需要建造的数量
 
         for mat_name, mat_count in material_list.items():
-            __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count + 1, mat_name, mat_count, manufacturing_costs_stack)
-    # else:  # 如果创建不出来，说明是最基础的材料了
-    #     update_dict(need_prepare_mat, {item_name: item_count})
+            __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count + 1, mat_name, mat_count, manufacturing_costs_stack, item_count)
+    else:  # 如果创建不出来，说明是最基础的材料了
+        update_dict(need_prepare_mat, {item_name: item_count * manufacture_count})
 
-def get_mat(item_name, item_count):
+
+def get_mat(order_list, order_count):
     need_prepare_mat = {}  # 所有需要准备的材料
 
     mat_in_layers = {}
     layer_count = 0
     manufacturing_costs_stack = []
 
-    # 递归执行获得制造材料
-    __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack)
+    for item_name, item_count in order_list.items():
+        # 递归执行获得制造材料
+        __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, order_count)
 
-    out_str = f"{item_name}所需材料:\n"
-    for k, v in mat_in_layers[0].items():
-        out_str += f"\t{k}:{v}\n"
-    if len(mat_in_layers) > 1:
-        out_str += "所有基本材料：\n"
-        for k, v in mat_in_layers[len(mat_in_layers) - 1].items():
-            out_str += f"\t{k}:{v}\n"
+    out_str = f"订单数量: order_count\n订单详情:\n"
+    for item_name, item_count in order_list.items():
+        out_str += f"\t{item_name}:{item_count}\n"
 
-    update_dict(need_prepare_mat, mat_in_layers[len(mat_in_layers) - 1])
     out_str += "\n所有需要准备的材料:\n"
     for k, v in need_prepare_mat.items():
         out_str += f"\t{k}:{v}\n"
@@ -102,10 +97,13 @@ def get_mat(item_name, item_count):
 
 
 def main():
-    item_name = "长须鲸级"
-    item_count = 1
+    order_list = {
+        "奥鸟级": 1,
+    }
 
-    materials_string = get_mat(item_name, item_count)
+    order_count = 1  # 订单数量
+
+    materials_string = get_mat(order_list, order_count)
     print(materials_string)
 
 

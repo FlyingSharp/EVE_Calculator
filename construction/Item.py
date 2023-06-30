@@ -17,6 +17,7 @@ class Item:
         self.name = name
         self.__config_path = self._get_config_path()
         self.__manufacturing_costs = 0.0
+        self.__manufacture_available = True
 
     def _get_config_path(self):
         # 获取调用该方法的类的文件路径
@@ -55,7 +56,7 @@ class Item:
             self._material_list = mat_list
         return self._material_list
 
-    def get_skill_influece(self):
+    def get_skill_influence(self):
         material_influence = 0
         time_influence = 0
 
@@ -75,7 +76,7 @@ class Item:
         return material_influence, time_influence
     
     def get_final_material_list(self) -> dict:
-        material_influence, time_influence = self.get_skill_influece()
+        material_influence, time_influence = self.get_skill_influence()
         all_material_list = self.get_material_list()
         material_list = {}
         out_list = {}
@@ -92,3 +93,6 @@ class Item:
 
     def get_item_class_name(self):
         return self.__name_in_tree
+
+    def get_manufacture_available(self):
+        return self.__manufacture_available

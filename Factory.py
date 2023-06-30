@@ -1,3 +1,4 @@
+from construction.base_material.BaseMaterial import BaseMaterial
 from construction.component.BasicComponent import BasicComponent
 from construction.component.AdvancedComponent import AdvancedComponent
 
@@ -12,6 +13,7 @@ import ConvertItemTree
 
 class Factory:
     item_classes = {
+        "基础材料": BaseMaterial,
         "基础组件": BasicComponent,
         "高级组件": AdvancedComponent,
         "货舰": Freighter,
@@ -31,7 +33,7 @@ class Factory:
         if item_class_name is None:
             # print("没有找到物品分类")
             return None
-        cls = self.item_classes.get(item_class_name.lower())
+        cls = self.item_classes.get(item_class_name.lower())  # 基础材料也应该能找到！
         if cls is None:
             # print("没有找到物品分类对应的类名称")
             return None
