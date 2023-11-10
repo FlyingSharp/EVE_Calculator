@@ -30,8 +30,11 @@ def get_currency_string(currency):
 
     # 将数字转换为货币格式的字符串，并去掉货币符号
     currency_string = '{:,.2f}'.format(currency).replace(decimal_point, thousands_sep)
+    #剔除最后三位（.00)
+    currency_string = currency_string[::-1].replace(",", ".", 1)[::-1]
+    currency_string = currency_string[:-3]
 
-    return currency_string[::-1].replace(",", ".", 1)[::-1]
+    return currency_string
 
 
 def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, manufacture_count, need_prepare_components):
@@ -86,7 +89,7 @@ def get_mat(order_list, order_count):
 
     out_str += "\n所有需要准备的材料:\n"
     for k, v in need_prepare_mat.items():
-        out_str += f"\t{k}:{v}\n"
+        out_str += f"\t{k}:{get_currency_string(v)}\n"
 
     materials_costs = 0.0
     for k, v in need_prepare_mat.items():  # 遍历各项基础材料价格总计
