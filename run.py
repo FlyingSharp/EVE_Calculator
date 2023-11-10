@@ -80,12 +80,12 @@ def get_mat(order_list, order_count):
 
     out_str = f"订单数量: {order_count}\n订单详情:\n"
     for item_name, item_count in order_list.items():
-        out_str += f"\t{item_name}:{item_count}\n"
+        out_str += f"\t{item_name}:{get_currency_string(item_count)}\n"
 
     if len(need_prepare_components) > 0:
         out_str += "\n所有组件的数量:\n"
         for k, v in need_prepare_components.items():
-            out_str += f"\t{k}:{v}\n"
+            out_str += f"\t{k}:{get_currency_string(v)}\n"
 
     out_str += "\n所有需要准备的材料:\n"
     for k, v in need_prepare_mat.items():
