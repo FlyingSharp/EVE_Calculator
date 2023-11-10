@@ -4,6 +4,7 @@ import Factory
 import ConvertItemTree
 from construction.Item import Item
 from price.GetPrice import GetPrice
+from construction.component.Component import Component
 
 
 def update_dict(dict_a: dict, dict_b: dict):
@@ -33,9 +34,14 @@ def get_currency_string(currency):
     return currency_string[::-1].replace(",", ".", 1)[::-1]
 
 
-def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, manufacture_count):
+def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, manufacture_count, need_prepare_components):
     item = Factory.Factory().create_item(item_name)
     if item.get_manufacture_available():
+        # 如果是组件类型，则加入need_prepare_components列表中
+        if isinstance(item, Component):
+            update_dict(need_prepare_components, {item_name: item_count})
+
+
         manufacturing_cost = item.get_manufacturing_cost() * item_count
         print(f"manufacturing_cost:{manufacturing_cost}")
         manufacturing_costs_stack.append(manufacturing_cost)
@@ -52,13 +58,14 @@ def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name
             mat_in_layers[layer_count][mat_name] += mat_count * item_count  # mat_count：建造这个物品所需要的材料的数量   item_count：这个物品需要建造的数量
 
         for mat_name, mat_count in material_list.items():
-            __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count + 1, mat_name, mat_count, manufacturing_costs_stack, item_count)
+            __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count + 1, mat_name, mat_count, manufacturing_costs_stack, item_count, need_prepare_components)
     else:  # 如果创建不出来，说明是最基础的材料了
         update_dict(need_prepare_mat, {item_name: item_count * manufacture_count})
 
 
 def get_mat(order_list, order_count):
     need_prepare_mat = {}  # 所有需要准备的材料
+    need_prepare_components = {}  # 共计需要准备的组件数量
 
     mat_in_layers = {}
     layer_count = 0
@@ -66,11 +73,16 @@ def get_mat(order_list, order_count):
 
     for item_name, item_count in order_list.items():
         # 递归执行获得制造材料
-        __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, order_count)
+        __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, order_count, need_prepare_components)
 
-    out_str = f"订单数量: order_count\n订单详情:\n"
+    out_str = f"订单数量: {order_count}\n订单详情:\n"
     for item_name, item_count in order_list.items():
         out_str += f"\t{item_name}:{item_count}\n"
+
+    if len(need_prepare_components) > 0:
+        out_str += "\n所有组件的数量:\n"
+        for k, v in need_prepare_components.items():
+            out_str += f"\t{k}:{v}\n"
 
     out_str += "\n所有需要准备的材料:\n"
     for k, v in need_prepare_mat.items():
@@ -100,7 +112,22 @@ def main():
 
     # 订单内容
     order_list = {
-        "奥鸟级": 1,
+        # "奥鸟级": 1,
+        # "渡神级": 1,
+        "旗舰船只维护舱": 12,
+        "旗舰电容器电池":5,
+        "旗舰发电机组":5,
+        "旗舰附甲":3,
+        "旗舰感应器组":4,
+        "旗舰护盾发射器":4,
+        "旗舰货柜舱":9,
+        "旗舰计算机系统":12,
+        "旗舰建设构件":17,
+        "旗舰克隆舱":12,
+        "旗舰联合机库舱":7,
+        "旗舰跳跃引擎":5,
+        "旗舰推进引擎":4,
+        "旗舰无人机挂舱":3,
     }
 
     order_count = 1  # 订单数量

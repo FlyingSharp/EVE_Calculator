@@ -5,6 +5,7 @@ Use:
     在ConvertItemTree.py的__item_tree中添加物品对应的类别
     在skill_influent_items.config中添加技能影响的物品类别
     在技能分类的skill.config中添加技能效果
+    在 run.py 文件 -> main() 函数 -> order_list 表中添加单个订单要建造的内容， 在 order_count 中设置要建造的订单数量。
     运行 run.py
 
 Note: 
