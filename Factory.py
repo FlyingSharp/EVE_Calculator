@@ -9,6 +9,10 @@ from construction.ship.flagship.industory_flagship.IndustoryFlagShip import Indu
 from construction.ship.flagship.strategic_freighter.StrategicFreighter import StrategicFreighter
 from construction.ship.flagship.carrier.supercarrier.SuperCarrier import SuperCarrier
 
+from construction.skill_chip.SkillChip import SkillChip
+
+from construction.gear.Gear import Gear
+
 import ConvertItemTree
 
 class Factory:
@@ -21,6 +25,8 @@ class Factory:
         "战略货舰": StrategicFreighter,
         "超级航母": SuperCarrier,
         "工业指挥舰": IndustoryCommderShip,
+        "技能芯片": SkillChip,
+        "旗舰装备": Gear,
     }
 
     __obj_created_list = [] # 已经创建过的obj列表

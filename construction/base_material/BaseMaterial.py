@@ -25,3 +25,7 @@ class BaseMaterial(Item):
 
     def get_manufacture_available(self):
         return self.__manufacture_available
+
+    def get_extra_material_influence(self):
+        return None
+

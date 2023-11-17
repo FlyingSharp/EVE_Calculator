@@ -1,5 +1,6 @@
 from construction.ship.Ship import Ship
 from skill.GetSkillEffect import GetSkillEffect
+from extra_buffer.BufferData import BufferData
 import MySkill
 
 import math
@@ -29,7 +30,8 @@ class ConventionalShip(Ship):
                     material_influence += influence_tuple_list[inner_level][0]
                     time_influence += influence_tuple_list[inner_level][1]
 
-        return material_influence + super_material_influence, time_influence + super_time_influence
+        extra_material_influence = self.get_extra_material_influence()
+        return material_influence + super_material_influence + extra_material_influence, time_influence + super_time_influence
     
     def get_final_material_list(self) -> dict:
         material_influence, time_influence = self.get_skill_influence()
@@ -43,3 +45,6 @@ class ConventionalShip(Ship):
             out_list[material_name] = math.ceil( count / 1.5 * (1.5 + material_influence))
         
         return out_list
+
+    def get_extra_material_influence(self) -> float:
+        return BufferData.conventional_ship_material_influence

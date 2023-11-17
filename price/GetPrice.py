@@ -1,5 +1,5 @@
 import os
-import  glob
+import glob
 
 def singleton(cls):
     instances = {}

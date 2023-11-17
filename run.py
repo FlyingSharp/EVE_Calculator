@@ -5,6 +5,7 @@ import ConvertItemTree
 from construction.Item import Item
 from price.GetPrice import GetPrice
 from construction.component.Component import Component
+from construction.ship.Ship import Ship
 
 
 def update_dict(dict_a: dict, dict_b: dict):
@@ -43,7 +44,9 @@ def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name
         # 如果是组件类型，则加入need_prepare_components列表中
         if isinstance(item, Component):
             update_dict(need_prepare_components, {item_name: item_count})
-
+        # 如果是舰船类型，也需要加入need_prepare_components列表中
+        if isinstance(item, Ship):
+            update_dict(need_prepare_components, {item_name: item_count})
 
         manufacturing_cost = item.get_manufacturing_cost() * item_count
         print(f"manufacturing_cost:{manufacturing_cost}")
@@ -113,24 +116,32 @@ def get_mat(order_list, order_count):
 
 def main():
 
+    # 大鱼组件清单
+    dayu_list = {
+        "旗舰船只维护舱": 12,
+        "旗舰电容器电池": 5,
+        "旗舰发电机组": 5,
+        "旗舰附甲": 3,
+        "旗舰感应器组": 4,
+        "旗舰护盾发射器": 4,
+        "旗舰货柜舱": 9,
+        "旗舰计算机系统": 12,
+        "旗舰建设构件": 17,
+        "旗舰克隆舱": 12,
+        "旗舰联合机库舱": 7,
+        "旗舰跳跃引擎": 5,
+        "旗舰推进引擎": 4,
+        "旗舰无人机挂舱": 3,
+    }
+
     # 订单内容
     order_list = {
         # "奥鸟级": 1,
         # "渡神级": 1,
-        "旗舰船只维护舱": 12,
-        "旗舰电容器电池":5,
-        "旗舰发电机组":5,
-        "旗舰附甲":3,
-        "旗舰感应器组":4,
-        "旗舰护盾发射器":4,
-        "旗舰货柜舱":9,
-        "旗舰计算机系统":12,
-        "旗舰建设构件":17,
-        "旗舰克隆舱":12,
-        "旗舰联合机库舱":7,
-        "旗舰跳跃引擎":5,
-        "旗舰推进引擎":4,
-        "旗舰无人机挂舱":3,
+
+        # "专家旗舰装备发明核心理论": 1
+
+        "蝠鲼重型采掘者无人机": 1
     }
 
     order_count = 1  # 订单数量
