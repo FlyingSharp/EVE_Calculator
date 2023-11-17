@@ -15,7 +15,7 @@ class MySkill(metaclass=Singleton):
 
     def load_skills(self):
         config_path = os.path.join(os.path.dirname(__file__), "myskill.config")
-        with open(config_path, "r") as f:
+        with open(config_path, "r", encoding='UTF-8') as f:
             for line in f:
                 key, values = line.strip().split(":")
                 nums = [int(x) for x in str(int(values))]

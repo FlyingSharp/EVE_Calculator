@@ -20,7 +20,7 @@ class GetPrice:
 
         for path in self.__paths:
             # 打开文件并读取内容
-            with open(path, 'r') as f:
+            with open(path, 'r', encoding='UTF-8') as f:
                 content = f.read()
             lines = content.split('\n')
             # 定义一个空字典用于存储解析后的数据

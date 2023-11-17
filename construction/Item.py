@@ -33,7 +33,7 @@ class Item:
             # define the regex pattern for matching each line of the file
             pattern = r"(\w+):\s*(\d+)"
             mat_list = {}
-            with open(self.__config_path, 'r') as f:
+            with open(self.__config_path, 'r', encoding='UTF-8') as f:
                 current_category = None # initialize the current category to None
                 for line in f:
                     line = line.strip() # remove any leading/trailing whitespaces

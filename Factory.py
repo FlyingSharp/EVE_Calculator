@@ -12,6 +12,7 @@ from construction.ship.flagship.carrier.supercarrier.SuperCarrier import SuperCa
 from construction.skill_chip.SkillChip import SkillChip
 
 from construction.gear.Gear import Gear
+from construction.gear.flag_ship_gear.FlagShipGear import FlagShipGear
 
 import ConvertItemTree
 
@@ -26,7 +27,8 @@ class Factory:
         "超级航母": SuperCarrier,
         "工业指挥舰": IndustoryCommderShip,
         "技能芯片": SkillChip,
-        "旗舰装备": Gear,
+        "装备": Gear,
+        "旗舰装备": FlagShipGear,
     }
 
     __obj_created_list = [] # 已经创建过的obj列表

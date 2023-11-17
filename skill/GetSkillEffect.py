@@ -32,7 +32,7 @@ class GetSkillEffect:
             # }
             try:
                 skill_Dictionary = {}
-                with open(skill_path, "r") as f:
+                with open(skill_path, "r", encoding='UTF-8') as f:
                     input_str = f.read()
 
                     for line in input_str.split("\n"):

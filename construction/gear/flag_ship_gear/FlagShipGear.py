@@ -6,8 +6,8 @@ import MySkill
 import math
 
 
-class Gear(Item):
-    __name_in_tree = "装备"
+class FlagShipGear(Item):
+    __name_in_tree = "旗舰装备"
 
     def __init__(self, name: str) -> None:
         super().__init__(name)
@@ -56,4 +56,4 @@ class Gear(Item):
         return self.__name_in_tree
 
     def get_extra_material_influence(self) -> float:
-        return BufferData.gear_material_influence
+        return BufferData.flag_ship_gear_material_influence
