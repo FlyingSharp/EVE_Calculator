@@ -1,3 +1,6 @@
+import os
+import re
+
 from construction.Item import Item
 from skill.GetSkillEffect import GetSkillEffect
 from extra_buffer.BufferData import BufferData
@@ -9,10 +12,11 @@ import math
 class FlagShipGear(Item):
     __name_in_tree = "旗舰装备"
 
+
     def __init__(self, name: str) -> None:
         super().__init__(name)
-        self.__config_path = self._get_config_path()
         self.__manufacturing_costs = 0
+        self.__config_path = self._get_config_path()
 
     def get_skill_influence(self):
         super_material_influence, super_time_influence = super().get_skill_influence()
@@ -50,6 +54,22 @@ class FlagShipGear(Item):
         return out_list
 
     def get_manufacturing_cost(self) -> float:
+        pattern = r"(\w+):\s*(\d+)"
+        with open(self.__config_path, 'r', encoding='UTF-8') as f:
+            current_category = None  # initialize the current category to None
+            for line in f:
+                line = line.strip()  # remove any leading/trailing whitespaces
+                if not line:  # skip empty lines
+                    continue
+                match = re.match(pattern, line)  # check if the line matches the pattern
+                if match:
+                    key = match.group(1)
+                    value = int(match.group(2))
+                    if key == "制造费" and current_category == self.name:
+                        self.__manufacturing_costs = value
+                else:
+                    current_category = line
+
         return self.__manufacturing_costs
 
     def get_item_class_name(self):
