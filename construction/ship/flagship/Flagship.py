@@ -1,5 +1,6 @@
 from construction.ship.Ship import Ship
 from skill.GetSkillEffect import GetSkillEffect
+from extra_buffer.BufferData import BufferData
 import MySkill
 
 import math
@@ -52,3 +53,6 @@ class Flagship(Ship):
 
     def get_item_class_name(self):
         return self.__name_in_tree
+
+    def get_extra_material_influence(self) -> float:
+        return BufferData.flag_ship_gear_material_influence
