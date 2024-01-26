@@ -33,7 +33,7 @@ class GetPrice:
                 # 按冒号分隔这一行的数据，并去掉两端的空格
                 parts = line.split(':')
                 key = parts[0].strip()
-                value = int(parts[1].strip())
+                value = float(parts[1].strip())
                 # 将解析出来的键值对添加到字典中
                 price_data[key] = value
 

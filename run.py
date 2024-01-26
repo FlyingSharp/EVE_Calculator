@@ -144,17 +144,17 @@ def main():
 
     # 订单内容
     order_list = {
-        "奥鸟级": 1,
+        # "奥鸟级": 1,
         # "渡神级": 1,
         #
         # "专家旗舰装备发明核心理论": 1,
         #
         # "蝠鲼重型采掘者无人机": 5,
         # "突击型掷矛手": 1,
-        # "冥府级":1,
+        "万古级":1,
     }
 
-    order_list = dushen_list
+    # order_list = dushen_list
 
     order_count = 1  # 订单数量
 

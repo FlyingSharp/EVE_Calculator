@@ -1,3 +1,5 @@
+import re
+
 from construction.ship.conventionalship.ConventionalShip import ConventionalShip
 from skill.GetSkillEffect import GetSkillEffect
 import MySkill
