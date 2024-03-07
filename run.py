@@ -31,14 +31,15 @@ def get_currency_string(currency):
 
     # 将数字转换为货币格式的字符串，并去掉货币符号
     currency_string = '{:,.2f}'.format(currency).replace(decimal_point, thousands_sep)
-    #剔除最后三位（.00)
+    # 剔除最后三位（.00)
     currency_string = currency_string[::-1].replace(",", ".", 1)[::-1]
     currency_string = currency_string[:-3]
 
     return currency_string
 
 
-def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, manufacture_count, need_prepare_components):
+def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack,
+                         manufacture_count, need_prepare_components):
     item = Factory.Factory().create_item(item_name)
     if item.get_manufacture_available():
         # 如果是组件类型，则加入need_prepare_components列表中
@@ -48,8 +49,10 @@ def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name
         if isinstance(item, Ship):
             update_dict(need_prepare_components, {item_name: item_count})
 
-        manufacturing_cost = item.get_manufacturing_cost() * item_count
-        print(f"manufacturing_cost:{manufacturing_cost}")
+        single_cost = item.get_manufacturing_cost()
+        manufacturing_cost = single_cost * item_count
+        # if item.get_manufacture_available():
+        #     print(f"manufacturing_cost:{manufacturing_cost}")
         manufacturing_costs_stack.append(manufacturing_cost)
         material_list_pack = item.get_final_material_list()  # 获得组件材料 如: 三钛合金:1000 { mat_1 = 15, mat_2 = 3}
         material_list = {}
@@ -61,10 +64,12 @@ def __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name
         for mat_name, mat_count in material_list.items():
             if mat_name not in mat_in_layers[layer_count]:
                 mat_in_layers[layer_count][mat_name] = 0
-            mat_in_layers[layer_count][mat_name] += mat_count * item_count  # mat_count：建造这个物品所需要的材料的数量   item_count：这个物品需要建造的数量
+            mat_in_layers[layer_count][
+                mat_name] += mat_count * item_count  # mat_count：建造这个物品所需要的材料的数量   item_count：这个物品需要建造的数量
 
         for mat_name, mat_count in material_list.items():
-            __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count + 1, mat_name, mat_count, manufacturing_costs_stack, item_count, need_prepare_components)
+            __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count + 1, mat_name, mat_count,
+                                 manufacturing_costs_stack, item_count, need_prepare_components)
     else:  # 如果创建不出来，说明是最基础的材料了
         update_dict(need_prepare_mat, {item_name: item_count * manufacture_count})
 
@@ -79,7 +84,8 @@ def get_mat(order_list, order_count):
 
     for item_name, item_count in order_list.items():
         # 递归执行获得制造材料
-        __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count, manufacturing_costs_stack, order_count, need_prepare_components)
+        __get_mat_with_layer(need_prepare_mat, mat_in_layers, layer_count, item_name, item_count,
+                             manufacturing_costs_stack, order_count, need_prepare_components)
 
     out_str = f"订单数量: {order_count}\n订单详情:\n"
     for item_name, item_count in order_list.items():
@@ -115,7 +121,6 @@ def get_mat(order_list, order_count):
 
 
 def main():
-
     # 大鱼组件清单
     dayu_list = {
         "旗舰船只维护舱": 12,
@@ -134,12 +139,32 @@ def main():
         "旗舰无人机挂舱": 3,
     }
 
-    #渡神组件清单
+    # 渡神组件清单
     dushen_list = {
         "旗舰附甲": 3,
         "旗舰货柜舱": 17,
         "旗舰建设构件": 9,
         "旗舰推进引擎": 2
+    }
+
+    # 奥鸟级组件清单
+    ao_niao = {
+        # "渡神级" : 1,
+        "旗舰船只维护舱": 13,
+        "旗舰电容器电池": 7,
+        "旗舰发电机组": 10,
+        "旗舰附甲": 5,
+        "旗舰护盾发射器": 10,
+        "旗舰货柜舱": 22,
+        "旗舰计算机系统": 10,
+        "旗舰建设构件": 22,
+        "旗舰跳跃引擎": 13,
+        "旗舰推进引擎": 5,
+        "莫尔石": 794448
+    }
+
+    remain = {
+        "旗舰计算机系统": 10,
     }
 
     # 订单内容
@@ -151,10 +176,10 @@ def main():
         #
         # "蝠鲼重型采掘者无人机": 5,
         # "突击型掷矛手": 1,
-        "万古级":1,
+        "万古级": 1,
     }
 
-    # order_list = dushen_list
+    order_list = {"龙鸟级": 1}
 
     order_count = 1  # 订单数量
 

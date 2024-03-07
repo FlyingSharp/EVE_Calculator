@@ -1,14 +1,13 @@
-from construction.ship.conventionalship.ConventionalShip import ConventionalShip
+from construction.Item import Item
 from skill.GetSkillEffect import GetSkillEffect
 import MySkill
 
-import math
 
-class IndustoryShip(ConventionalShip):
-    __name_in_tree = "工业舰"
+class EnhancedItem(Item):
+
     def __init__(self, name: str) -> None:
         super().__init__(name)
-        self.__config_path = self._get_config_path()
+        self._name_in_tree = "增强物品"
 
     def get_skill_influence(self):
         super_material_influence, super_time_influence = super().get_skill_influence()
@@ -16,7 +15,7 @@ class IndustoryShip(ConventionalShip):
         material_influence = 0
         time_influence = 0
 
-        item_relate_skills = GetSkillEffect().get_skill_name_by_item_name(self.__name_in_tree)
+        item_relate_skills = GetSkillEffect().get_skill_name_by_item_name(self._name_in_tree)
         my_skill = MySkill.MySkill().skills
         for skill_name, skill_level in my_skill.items():
             if skill_name in item_relate_skills:
@@ -29,18 +28,5 @@ class IndustoryShip(ConventionalShip):
                     material_influence += influence_tuple_list[inner_level][0]
                     time_influence += influence_tuple_list[inner_level][1]
 
-        return material_influence + super_material_influence, time_influence + super_time_influence
-    
-    def get_final_material_list(self) -> dict:
-        material_influence, time_influence = self.get_skill_influence()
-        all_material_list = self.get_material_list()
-        material_list = {}
-        out_list = {}
-        if self.name in all_material_list:
-            material_list = all_material_list[self.name].items()
-
-        for material_name, count in material_list:
-            out_list[material_name] = math.ceil( count / 1.5 * (1.5 + material_influence))
-        
-        return out_list
-
+        extra_material_influence = self.get_extra_material_influence()
+        return material_influence + super_material_influence + extra_material_influence, time_influence + super_time_influence
