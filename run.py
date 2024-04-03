@@ -105,6 +105,23 @@ def get_mat(order_list, order_count):
         price = GetPrice().get_price(k)
         materials_costs += price * v
 
+    # 分别统计矿物总价和行星资源总价
+    mineral_total_cost = 0
+    planetary_total_cost = 0
+    for k, v in need_prepare_mat.items():
+        group_name = GetPrice().get_mat_group(k)
+        if group_name == "mineral":
+            mineral_total_cost += GetPrice().get_price(k) * v
+        elif group_name == "planetary_resources":
+            planetary_total_cost += GetPrice().get_price(k) * v
+
+    if mineral_total_cost > 0:
+        mineral_total_cost_string = get_currency_string(mineral_total_cost)
+        out_str += f"\n矿物价格总计:\n{mineral_total_cost_string}"
+    if planetary_total_cost > 0:
+        planetary_total_cost_string = get_currency_string(planetary_total_cost)
+        out_str += f"\n行星资源价格总计:\n{planetary_total_cost_string}"
+
     materials_costs_string = get_currency_string(materials_costs)
     out_str += f"\n材料价格总计:\n{materials_costs_string}"
 
@@ -179,7 +196,7 @@ def main():
         "万古级": 1,
     }
 
-    order_list = {"龙鸟级": 1}
+    # order_list = {"龙鸟级": 1}
 
     order_count = 1  # 订单数量
 
