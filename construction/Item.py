@@ -10,12 +10,13 @@ import MySkill
 class Item:
     def __init__(self, name: str) -> None:
         self._material_list = None
-        self._name_in_tree = "物品"
+        self.__name_in_tree = "物品"
         self._skill_path = "skill/industory_skill/skill.config"
         self._config_path = self._get_config_path()
         self._manufacturing_costs = 0.0
         self._manufacture_available = True
         self.get_material_list()
+        self.__extra_mat_influence = 0
 
         self.name = name
 
@@ -60,10 +61,9 @@ class Item:
         material_influence = 0
         time_influence = 0
 
-        item_relate_skills = GetSkillEffect().get_skill_name_by_item_name(self._name_in_tree)
         my_skill = MySkill.MySkill().skills
         for skill_name, skill_level in my_skill.items():
-            if skill_name in item_relate_skills:
+            if skill_name in GetSkillEffect().get_skill_name_by_item_name(self.__name_in_tree):
                 skill_effect = GetSkillEffect().get_full_skill_effect(self._skill_path, skill_name)
                 effect_self_skill = skill_effect[skill_name]
                 for i in range(0, 3):
@@ -90,11 +90,5 @@ class Item:
     def get_manufacturing_cost(self) -> float:
         return self._manufacturing_costs
 
-    def get_item_class_name(self):
-        return self._name_in_tree
-
     def get_manufacture_available(self):
         return self._manufacture_available
-
-    def get_extra_material_influence(self) -> float:
-        return 0.0

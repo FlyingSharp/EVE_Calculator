@@ -16,7 +16,7 @@ from construction.ship.flagship.carrier.maintenance_support_carrier.MaintenanceS
 from construction.skill_chip.SkillChip import SkillChip
 
 from construction.gear.Gear import Gear
-from construction.gear.flag_ship_gear.FlagShipGear import FlagShipGear
+from construction.flag_ship_gear import FlagShipGear
 
 import ConvertItemTree
 
