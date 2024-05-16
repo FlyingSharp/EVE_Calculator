@@ -51,15 +51,10 @@ class GetPrice:
 
     def __find_all_path(self):
         # 获取当前脚本所在的目录
-        current_path = os.path.dirname(os.path.abspath(__file__))
-        folder_list = os.listdir(current_path)
-        for folder in folder_list:
-            folder_path = os.path.join(current_path, folder)
-            if not os.path.isdir(folder_path):
-                continue
-            pattern = os.path.join(folder_path, 'price.config')
-            folder_paths = glob.glob(pattern)
-            self.__paths.extend(folder_paths)
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        config_files = glob.glob(os.path.join(current_path, '*.config'))
+        for path in config_files:
+            self.__paths.extend([path])
 
     def __str__(self):
         return str(self.__paths) + '\n' + str(self.__price_data)
