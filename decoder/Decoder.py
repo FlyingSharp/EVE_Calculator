@@ -1,12 +1,22 @@
 import os
 import glob
 import re
+import threading
 
 
 class Decoder:
+    _instance_lock = threading.Lock()
+
     def __init__(self):
         self._decoder_list = {}
         self._read_config()
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(Decoder, "_instance"):
+            with Decoder._instance_lock:
+                if not hasattr(Decoder, "_instance"):
+                    Decoder._instance = object.__new__(cls)
+        return Decoder._instance
 
     def __str__(self):
         return str(self._decoder_list)
