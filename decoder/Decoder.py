@@ -24,7 +24,6 @@ class Decoder:
     def _read_config(self):
         current_path = os.path.dirname(os.path.realpath(__file__))
         config_files = glob.glob(os.path.join(current_path, '*.config'))
-        pattern = r'(.*):(-?\d+(\.\d+)?)'
         for path in config_files:
             with open(path, 'r', encoding='UTF-8') as f:
                 decoder_name = None
@@ -32,7 +31,7 @@ class Decoder:
                     line = line.strip()
                     if not line:
                         continue
-                    match = re.match(pattern, line)
+                    match = re.match(r'(.*):(-?\d+(\.\d+)?)', line)
                     if match:  # 匹配成功，说明解码器的属性描述
                         key = match.group(1)
                         value = float(match.group(2))
@@ -48,6 +47,19 @@ class Decoder:
         elif decoder_type == "逆向":
             return  self._decoder_list[decoder_name]['时间消耗'], self._decoder_list[decoder_name]['逆向成功率']
 
+    def get_decoder_success_affection(self, decoder_name):
+        decoder_type = decoder_name[:2]
+        if decoder_type == "逆向":
+            return self._decoder_list[decoder_name]['逆向成功率']
+        else:
+            return 0
+
+    def get_decoder_mat_affection(self, decoder_name):
+        decoder_type = decoder_name[:2]
+        if decoder_type == "生产":
+            return self._decoder_list[decoder_name]['材料效率']
+        else:
+            return 0
 
 if __name__ == "__main__":
     print(Decoder())

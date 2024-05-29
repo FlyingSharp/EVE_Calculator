@@ -100,6 +100,15 @@ def get_mat(order_list, order_count):
     for k, v in need_prepare_mat.items():
         out_str += f"\t{k}:{get_currency_string(v)}\n"
 
+    if len(need_prepare_components) > 0:
+        out_str += "\n\n\n所有组件的数量(纯数字版):\n"
+        for k, v in need_prepare_components.items():
+            out_str += f"{get_currency_string(v)}\n"
+
+    out_str += "\n所有需要准备的材料(纯数字版):\n"
+    for k, v in need_prepare_mat.items():
+        out_str += f"{get_currency_string(v)}\n"
+
     materials_costs = 0.0
     for k, v in need_prepare_mat.items():  # 遍历各项基础材料价格总计
         price = GetPrice().get_price(k)
@@ -180,9 +189,27 @@ def main():
         "莫尔石": 794448
     }
 
+    wan_gu = {
+        "旗舰船只维护舱": 80,
+        "旗舰电容器电池": 48,
+        "旗舰发电机组": 40,
+        "旗舰附甲": 94,
+        "旗舰感应器组": 31,
+        "旗舰护盾发射器": 60,
+        "旗舰计算机系统": 40,
+        "旗舰建设构件": 22,
+        "旗舰联合机库舱": 73,
+        "旗舰跳跃引擎": 32,
+        "旗舰推进引擎": 40,
+        "旗舰无人机挂舱": 188,
+    }
+
     remain = {
         "旗舰计算机系统": 10,
     }
+
+    # 由于没有100%材料效率时的原始数据，故最终数据会与游戏中的存在偏差
+    flag_ship_offset = 0.163
 
     # 订单内容
     order_list = {
@@ -193,10 +220,10 @@ def main():
         #
         # "蝠鲼重型采掘者无人机": 5,
         # "突击型掷矛手": 1,
-        "万古级": 1,
+        # "万古级": 1,
     }
 
-    # order_list = {"龙鸟级": 1}
+    order_list = wan_gu
 
     order_count = 1  # 订单数量
 

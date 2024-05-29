@@ -1,5 +1,6 @@
 import os
 import glob
+import re
 
 
 def singleton(cls):
@@ -31,7 +32,7 @@ class GetPrice:
             price_data = {}
             # 存储每种材料的分类
             mat_group = {}
-            group_key = path.split('/')[-2]
+            group_key = re.match(r"(\w+).(\w+)",path.split('/')[-1])[1]
             mat_group[group_key] = []
             # 遍历每一行数据并解析
             for line in lines:
