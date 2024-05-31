@@ -221,9 +221,10 @@ def main():
         # "蝠鲼重型采掘者无人机": 5,
         # "突击型掷矛手": 1,
         # "万古级": 1,
+        "尼铎格尔级": 1
     }
 
-    order_list = wan_gu
+    # order_list = wan_gu
 
     order_count = 1  # 订单数量
 
